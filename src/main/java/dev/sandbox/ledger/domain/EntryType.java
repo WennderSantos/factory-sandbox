@@ -13,6 +13,10 @@ public enum EntryType {
         };
     }
 
+    public boolean isCredit() {
+        return this == CREDIT;
+    }
+
     public String label() {
         return name().toLowerCase(Locale.ROOT);
     }
