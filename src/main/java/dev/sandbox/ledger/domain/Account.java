@@ -14,4 +14,9 @@ public record Account(UUID id, UUID organizationId, String name, String currency
             throw new IllegalArgumentException("currency must be an ISO 4217 code");
         }
     }
+
+    public boolean supports(String code) {
+        Objects.requireNonNull(code, "currency");
+        return currency.equalsIgnoreCase(code);
+    }
 }
