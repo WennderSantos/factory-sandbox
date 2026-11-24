@@ -145,5 +145,71 @@ class LedgerEntryTest {
     void acceptsNullAndBlankDescriptions() {
         assertThatCode(() -> entry((String) null)).doesNotThrowAnyException();
         assertThatCode(() -> entry("  ")).doesNotThrowAnyException();
+
+    void reversedCreditEntryIsDebit() {
+        assertThat(entry(EntryType.CREDIT, "10.00").reversed().type()).isEqualTo(EntryType.DEBIT);
+    }
+
+    @Test
+    void reversedDebitEntryIsCredit() {
+        assertThat(entry(EntryType.DEBIT, "10.00").reversed().type()).isEqualTo(EntryType.CREDIT);
+    }
+
+    @Test
+    void reversedKeepsEveryOtherComponent() {
+        final var original = entry(EntryType.CREDIT, "10.50", "ref-1");
+
+        final var reversed = original.reversed();
+
+        assertThat(reversed.id()).isEqualTo(original.id());
+        assertThat(reversed.organizationId()).isEqualTo(original.organizationId());
+        assertThat(reversed.accountId()).isEqualTo(original.accountId());
+        assertThat(reversed.amount()).isEqualTo(original.amount());
+        assertThat(reversed.description()).isEqualTo(original.description());
+        assertThat(reversed.externalReference()).isEqualTo(original.externalReference());
+        assertThat(reversed.createdAt()).isEqualTo(original.createdAt());
+    }
+
+    @Test
+    void reversedKeepsNullDescriptionAndExternalReference() {
+        final var original = new LedgerEntry(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                EntryType.DEBIT,
+                new BigDecimal("10.00"),
+                null,
+                null,
+                Instant.parse("2026-01-01T00:00:00Z"));
+
+        final var reversed = original.reversed();
+
+        assertThat(reversed.description()).isNull();
+        assertThat(reversed.externalReference()).isNull();
+    }
+
+    @Test
+    void reversedDoesNotChangeTheOriginal() {
+        for (final var type : EntryType.values()) {
+            final var original = entry(type, "10.00");
+
+            original.reversed();
+
+            assertThat(original.type()).isEqualTo(type);
+        }
+    }
+
+    @Test
+    void reversingTwiceGivesTheOriginalBack() {
+        for (final var type : EntryType.values()) {
+            final var original = entry(type, "10.00");
+
+            assertThat(original.reversed().reversed()).isEqualTo(original);
+        }
+    }
+
+    @Test
+    void reversedKeepsAmountNormalizedToTwoDecimalPlaces() {
+        assertThat(entry(EntryType.CREDIT, "10").reversed().amount()).isEqualTo(new BigDecimal("10.00"));
     }
 }

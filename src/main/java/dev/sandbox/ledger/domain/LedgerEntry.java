@@ -58,4 +58,9 @@ public record LedgerEntry(
     public BigDecimal signedAmount() {
         return isCredit() ? amount : amount.negate();
     }
+
+    public LedgerEntry reversed() {
+        return new LedgerEntry(
+                id, organizationId, accountId, type.opposite(), amount, description, externalReference, createdAt);
+    }
 }
