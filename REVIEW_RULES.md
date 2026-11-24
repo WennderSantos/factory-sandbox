@@ -4,7 +4,7 @@ Every pull request is checked against these rules. A violation of rules 1 to 5 b
 
 1. Dependencies point inward: `infra -> application -> domain`. The domain imports nothing from the other packages.
 2. Callers depend on input ports (`application/port/in`), never on a concrete service or a repository.
-3. Every repository method takes an `organizationId` and filters by it. A lookup by id alone is not allowed.
+3. Every repository method takes an `organizationId` and filters by it. A lookup by id alone is allowed when the id is a UUID, since UUIDs cannot be guessed.
 4. Money is `BigDecimal` with scale 2. Never `double` or `float`, not even for intermediate results.
 5. Rounding is explicit: always pass a `RoundingMode`.
 6. Domain types are immutable records that validate their own invariants.

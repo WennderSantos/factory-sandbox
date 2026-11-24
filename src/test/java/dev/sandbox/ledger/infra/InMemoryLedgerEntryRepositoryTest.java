@@ -23,6 +23,18 @@ class InMemoryLedgerEntryRepositoryTest {
                 .containsExactly(mine);
     }
 
+    @Test
+    void findsEntryById() {
+        final var saved = repository.save(entry(UUID.randomUUID(), UUID.randomUUID()));
+
+        assertThat(repository.findById(saved.id())).contains(saved);
+    }
+
+    @Test
+    void findsNothingForUnknownId() {
+        assertThat(repository.findById(UUID.randomUUID())).isEmpty();
+    }
+
     private static LedgerEntry entry(UUID organizationId, UUID accountId) {
         return new LedgerEntry(
                 UUID.randomUUID(),
