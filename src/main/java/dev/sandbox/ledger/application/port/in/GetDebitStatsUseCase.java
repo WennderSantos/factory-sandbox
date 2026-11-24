@@ -7,5 +7,5 @@ public interface GetDebitStatsUseCase {
 
     DebitStats debitStatsOf(UUID organizationId, UUID accountId);
 
-    record DebitStats(BigDecimal averageDebit, BigDecimal debitShare) {}
+    record DebitStats(BigDecimal averageDebit, BigDecimal debitShare, boolean balanced) {}
 }

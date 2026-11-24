@@ -38,6 +38,17 @@ class GetDebitStatsServiceTest {
 
         assertThat(result.averageDebit()).isEqualTo(new BigDecimal("15.02"));
         assertThat(result.debitShare()).isEqualByComparingTo("0.5");
+        assertThat(result.balanced()).isFalse();
+    }
+
+    @Test
+    void anAccountWhoseCreditsEqualItsDebitsIsBalanced() {
+        final var account = fixture.openAccount(organizationId);
+        fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "30"));
+        fixture.postEntry.post(fixture.command(account, EntryType.DEBIT, "10.5"));
+        fixture.postEntry.post(fixture.command(account, EntryType.DEBIT, "19.50"));
+
+        assertThat(stats.debitStatsOf(organizationId, account.id()).balanced()).isTrue();
     }
 
     @Test

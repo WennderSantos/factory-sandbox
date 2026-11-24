@@ -30,12 +30,17 @@ public class GetDebitStatsService implements GetDebitStatsUseCase {
                 .map(LedgerEntry::amount)
                 .toList();
         final var zero = BigDecimal.ZERO.setScale(LedgerEntry.SCALE);
+        final var creditTotal = entries.stream()
+                .filter(LedgerEntry::isCredit)
+                .map(LedgerEntry::amount)
+                .reduce(zero, BigDecimal::add);
+        final var total = debits.stream().reduce(zero, BigDecimal::add);
+        final var balanced = creditTotal.equals(total);
         if (debits.isEmpty()) {
-            return new DebitStats(zero, zero);
+            return new DebitStats(zero, zero, balanced);
         }
-        final var total = debits.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
         final var average = total.divide(BigDecimal.valueOf(debits.size()), LedgerEntry.SCALE, RoundingMode.HALF_EVEN);
         final var share = BigDecimal.valueOf(debits.size()).divide(BigDecimal.valueOf(entries.size()));
-        return new DebitStats(average, share);
+        return new DebitStats(average, share, balanced);
     }
 }
