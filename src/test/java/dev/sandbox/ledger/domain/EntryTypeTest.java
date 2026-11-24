@@ -2,6 +2,7 @@ package dev.sandbox.ledger.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
 class EntryTypeTest {
@@ -27,5 +28,22 @@ class EntryTypeTest {
     @Test
     void keepsExactlyCreditAndDebitInOrder() {
         assertThat(EntryType.values()).containsExactly(EntryType.CREDIT, EntryType.DEBIT);
+    }
+
+    @Test
+    void creditLabelIsCredit() {
+        assertThat(EntryType.CREDIT.label()).isEqualTo("credit");
+    }
+
+    @Test
+    void debitLabelIsDebit() {
+        assertThat(EntryType.DEBIT.label()).isEqualTo("debit");
+    }
+
+    @Test
+    void labelIsLowerCaseNameForEveryConstant() {
+        for (final EntryType t : EntryType.values()) {
+            assertThat(t.label()).isEqualTo(t.name().toLowerCase(Locale.ROOT));
+        }
     }
 }
