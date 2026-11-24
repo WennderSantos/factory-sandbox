@@ -4,6 +4,7 @@ import dev.sandbox.ledger.application.port.in.CanPayUseCase;
 import dev.sandbox.ledger.application.port.in.GetBalanceUseCase;
 import dev.sandbox.ledger.application.port.out.AccountRepository;
 import dev.sandbox.ledger.domain.AccountNotFoundException;
+import dev.sandbox.ledger.domain.LedgerEntry;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -21,6 +22,10 @@ public class CanPayService implements CanPayUseCase {
     public boolean canPay(UUID organizationId, UUID accountId, BigDecimal amount, String currency) {
         if (amount == null || amount.signum() <= 0) {
             throw new IllegalArgumentException("amount must be positive");
+        }
+        // No upper bound on purpose: canPay is a read-only question, so an amount above any balance simply answers false.
+        if (amount.scale() > LedgerEntry.SCALE) {
+            throw new IllegalArgumentException("amount must have at most " + LedgerEntry.SCALE + " decimal places");
         }
         final var account = accountRepository
                 .findByIdAndOrganizationId(accountId, organizationId)

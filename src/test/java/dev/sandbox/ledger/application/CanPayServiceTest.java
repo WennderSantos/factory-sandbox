@@ -64,4 +64,15 @@ class CanPayServiceTest {
         assertThatThrownBy(() -> canPay(organizationId, accountId, "-1.00", "BRL"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void rejectsAmountWithMoreThanTwoDecimalPlacesBeforeAccountLookup() {
+        assertThatThrownBy(() -> canPay(organizationId, UUID.randomUUID(), "1.001", "BRL"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void hugeAmountAnswersFalse() {
+        assertThat(canPay(organizationId, fundedAccount(), "999999999999.00", "BRL")).isFalse();
+    }
 }
