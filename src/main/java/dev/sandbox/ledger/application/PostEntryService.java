@@ -35,6 +35,7 @@ public class PostEntryService implements PostEntryUseCase {
                 command.type(),
                 command.amount(),
                 command.description(),
+                command.externalReference(),
                 clock.instant());
         return ledgerEntryRepository.save(entry);
     }

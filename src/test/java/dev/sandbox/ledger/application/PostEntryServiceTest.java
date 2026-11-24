@@ -28,6 +28,26 @@ class PostEntryServiceTest {
     }
 
     @Test
+    void storesTheExternalReferenceOfTheCommand() {
+        final var account = fixture.openAccount(organizationId);
+
+        final var entry = fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "100.00", "invoice-42"));
+
+        assertThat(entry.externalReference()).isEqualTo("invoice-42");
+        assertThat(fixture.entries.findByOrganizationIdAndAccountId(organizationId, account.id()))
+                .containsExactly(entry);
+    }
+
+    @Test
+    void storesEntryWithoutExternalReference() {
+        final var account = fixture.openAccount(organizationId);
+
+        final var entry = fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "100.00"));
+
+        assertThat(entry.externalReference()).isNull();
+    }
+
+    @Test
     void rejectsDebitAboveBalance() {
         final var account = fixture.openAccount(organizationId);
         fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "50.00"));
@@ -40,7 +60,7 @@ class PostEntryServiceTest {
     void rejectsEntryForAccountOfAnotherOrganization() {
         final var account = fixture.openAccount(organizationId);
         final var foreign = new PostEntryCommand(
-                UUID.randomUUID(), account.id(), EntryType.CREDIT, new BigDecimal("1.00"), "test");
+                UUID.randomUUID(), account.id(), EntryType.CREDIT, new BigDecimal("1.00"), "test", null);
 
         assertThatThrownBy(() -> fixture.postEntry.post(foreign)).isInstanceOf(AccountNotFoundException.class);
     }

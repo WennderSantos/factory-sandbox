@@ -31,6 +31,7 @@ class InMemoryLedgerEntryRepositoryTest {
                 EntryType.CREDIT,
                 new BigDecimal("1.00"),
                 "test",
+                null,
                 Instant.parse("2026-01-01T00:00:00Z"));
     }
 }

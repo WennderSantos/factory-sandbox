@@ -24,6 +24,11 @@ final class LedgerFixture {
     }
 
     PostEntryCommand command(Account account, EntryType type, String amount) {
-        return new PostEntryCommand(account.organizationId(), account.id(), type, new BigDecimal(amount), "test");
+        return command(account, type, amount, null);
+    }
+
+    PostEntryCommand command(Account account, EntryType type, String amount, String externalReference) {
+        return new PostEntryCommand(
+                account.organizationId(), account.id(), type, new BigDecimal(amount), "test", externalReference);
     }
 }
