@@ -145,7 +145,9 @@ class LedgerEntryTest {
     void acceptsNullAndBlankDescriptions() {
         assertThatCode(() -> entry((String) null)).doesNotThrowAnyException();
         assertThatCode(() -> entry("  ")).doesNotThrowAnyException();
+    }
 
+    @Test
     void reversedCreditEntryIsDebit() {
         assertThat(entry(EntryType.CREDIT, "10.00").reversed().type()).isEqualTo(EntryType.DEBIT);
     }
