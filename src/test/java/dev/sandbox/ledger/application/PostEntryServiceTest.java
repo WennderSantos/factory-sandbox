@@ -57,6 +57,31 @@ class PostEntryServiceTest {
     }
 
     @Test
+    void rejectedDebitDoesNotExposeBalanceNorWriteEntry() {
+        final var account = fixture.openAccount(organizationId);
+        fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "100.00"));
+
+        assertThatThrownBy(() -> fixture.postEntry.post(fixture.command(account, EntryType.DEBIT, "250.00")))
+                .isInstanceOf(InsufficientFundsException.class)
+                .message()
+                .doesNotContain("100.00");
+
+        assertThat(fixture.getBalance.balanceOf(organizationId, account.id())).isEqualByComparingTo("100.00");
+        assertThat(fixture.entries.findByOrganizationIdAndAccountId(organizationId, account.id()))
+                .hasSize(1);
+    }
+
+    @Test
+    void postsDebitEqualToBalance() {
+        final var account = fixture.openAccount(organizationId);
+        fixture.postEntry.post(fixture.command(account, EntryType.CREDIT, "100.00"));
+
+        fixture.postEntry.post(fixture.command(account, EntryType.DEBIT, "100.00"));
+
+        assertThat(fixture.getBalance.balanceOf(organizationId, account.id())).isEqualByComparingTo("0.00");
+    }
+
+    @Test
     void rejectsEntryForAccountOfAnotherOrganization() {
         final var account = fixture.openAccount(organizationId);
         final var foreign = new PostEntryCommand(

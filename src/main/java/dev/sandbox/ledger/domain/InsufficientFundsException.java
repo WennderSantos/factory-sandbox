@@ -5,7 +5,8 @@ import java.util.UUID;
 
 public class InsufficientFundsException extends RuntimeException {
 
-    public InsufficientFundsException(UUID accountId, BigDecimal balance, BigDecimal requested) {
-        super("account " + accountId + " has balance " + balance + ", requested " + requested);
+    // The balance is left out on purpose: error messages reach logs and callers.
+    public InsufficientFundsException(UUID accountId, BigDecimal requested) {
+        super("insufficient funds on account " + accountId + ", requested " + requested);
     }
 }
