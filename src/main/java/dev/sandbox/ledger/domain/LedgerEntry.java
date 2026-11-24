@@ -58,4 +58,11 @@ public record LedgerEntry(
     public BigDecimal signedAmount() {
         return isCredit() ? amount : amount.negate();
     }
+
+    // Pure mirror of this entry: id and createdAt are kept on purpose. Whoever persists a reversal
+    // as a new record must assign its own id and timestamp.
+    public LedgerEntry reversed() {
+        return new LedgerEntry(
+                id, organizationId, accountId, type.opposite(), amount, description, externalReference, createdAt);
+    }
 }
