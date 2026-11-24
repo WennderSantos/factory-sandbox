@@ -26,7 +26,7 @@ public class PostEntryService implements PostEntryUseCase {
     public LedgerEntry post(PostEntryCommand command) {
         final var balance = getBalanceUseCase.balanceOf(command.organizationId(), command.accountId());
         if (command.type() == EntryType.DEBIT && balance.compareTo(command.amount()) < 0) {
-            throw new InsufficientFundsException(command.accountId(), balance, command.amount());
+            throw new InsufficientFundsException(command.accountId(), command.amount());
         }
         final var entry = new LedgerEntry(
                 UUID.randomUUID(),
