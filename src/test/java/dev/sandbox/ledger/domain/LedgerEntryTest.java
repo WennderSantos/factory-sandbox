@@ -37,6 +37,17 @@ class LedgerEntryTest {
     }
 
     @Test
+    void anEntryOfOneThousandOrMoreIsLarge() {
+        assertThat(entry(EntryType.DEBIT, "1000.00").isLarge()).isTrue();
+        assertThat(entry(EntryType.CREDIT, "2500").isLarge()).isTrue();
+    }
+
+    @Test
+    void anEntryUnderOneThousandIsNotLarge() {
+        assertThat(entry(EntryType.DEBIT, "999.99").isLarge()).isFalse();
+    }
+
+    @Test
     void normalizesAmountToTwoDecimalPlaces() {
         assertThat(entry(EntryType.CREDIT, "10").amount()).isEqualTo(new BigDecimal("10.00"));
     }

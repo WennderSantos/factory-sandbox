@@ -17,6 +17,7 @@ public record LedgerEntry(
 
     public static final int SCALE = 2;
     public static final int MAX_EXTERNAL_REFERENCE_LENGTH = 64;
+    public static final BigDecimal LARGE_FROM = new BigDecimal("1000.00");
 
     public LedgerEntry {
         Objects.requireNonNull(id, "id");
@@ -57,6 +58,10 @@ public record LedgerEntry(
 
     public boolean hasExternalReference() {
         return externalReference != null;
+    }
+
+    public boolean isLarge() {
+        return amount.compareTo(LARGE_FROM) >= 0;
     }
 
     public BigDecimal signedAmount() {
