@@ -51,6 +51,10 @@ public record LedgerEntry(
         return type == EntryType.DEBIT;
     }
 
+    public boolean hasDescription() {
+        return description != null && !description.isBlank();
+    }
+
     public BigDecimal signedAmount() {
         return isCredit() ? amount : amount.negate();
     }

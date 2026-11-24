@@ -1,6 +1,7 @@
 package dev.sandbox.ledger.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
@@ -15,13 +16,22 @@ class LedgerEntryTest {
     }
 
     private static LedgerEntry entry(EntryType type, String amount, String externalReference) {
+        return entry(type, amount, "test", externalReference);
+    }
+
+    private static LedgerEntry entry(String description) {
+        return entry(EntryType.CREDIT, "10.00", description, null);
+    }
+
+    private static LedgerEntry entry(
+            EntryType type, String amount, String description, String externalReference) {
         return new LedgerEntry(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 UUID.randomUUID(),
                 type,
                 new BigDecimal(amount),
-                "test",
+                description,
                 externalReference,
                 Instant.parse("2026-01-01T00:00:00Z"));
     }
@@ -104,5 +114,36 @@ class LedgerEntryTest {
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "10.00", reference))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("at most 64 characters");
+    }
+
+    @Test
+    void nullDescriptionIsNotADescription() {
+        assertThat(entry((String) null).hasDescription()).isFalse();
+    }
+
+    @Test
+    void blankDescriptionIsNotADescription() {
+        assertThat(entry("").hasDescription()).isFalse();
+        assertThat(entry("   ").hasDescription()).isFalse();
+        assertThat(entry("\t\n").hasDescription()).isFalse();
+    }
+
+    @Test
+    void realDescriptionIsADescription() {
+        assertThat(entry("Monthly fee").hasDescription()).isTrue();
+    }
+
+    @Test
+    void descriptionWithSurroundingWhitespaceIsKeptUnchanged() {
+        final var entry = entry("  fee  ");
+
+        assertThat(entry.hasDescription()).isTrue();
+        assertThat(entry.description()).isEqualTo("  fee  ");
+    }
+
+    @Test
+    void acceptsNullAndBlankDescriptions() {
+        assertThatCode(() -> entry((String) null)).doesNotThrowAnyException();
+        assertThatCode(() -> entry("  ")).doesNotThrowAnyException();
     }
 }
