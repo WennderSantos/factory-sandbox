@@ -43,7 +43,11 @@ public record LedgerEntry(
         }
     }
 
+    public boolean isCredit() {
+        return type == EntryType.CREDIT;
+    }
+
     public BigDecimal signedAmount() {
-        return type == EntryType.CREDIT ? amount : amount.negate();
+        return isCredit() ? amount : amount.negate();
     }
 }

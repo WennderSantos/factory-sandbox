@@ -37,6 +37,16 @@ class LedgerEntryTest {
     }
 
     @Test
+    void creditEntryIsCredit() {
+        assertThat(entry(EntryType.CREDIT, "10.00").isCredit()).isTrue();
+    }
+
+    @Test
+    void debitEntryIsNotCredit() {
+        assertThat(entry(EntryType.DEBIT, "10.00").isCredit()).isFalse();
+    }
+
+    @Test
     void rejectsZeroOrNegativeAmount() {
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "0.00")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "-1.00")).isInstanceOf(IllegalArgumentException.class);
