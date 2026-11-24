@@ -148,6 +148,16 @@ class LedgerEntryTest {
     }
 
     @Test
+    void hasExternalReferenceWhenReferenceIsPresent() {
+        assertThat(entry(EntryType.CREDIT, "10.00", "ref-1").hasExternalReference()).isTrue();
+    }
+
+    @Test
+    void hasNoExternalReferenceWhenReferenceIsNull() {
+        assertThat(entry(EntryType.CREDIT, "10.00").hasExternalReference()).isFalse();
+    }
+
+    @Test
     void reversedCreditEntryIsDebit() {
         assertThat(entry(EntryType.CREDIT, "10.00").reversed().type()).isEqualTo(EntryType.DEBIT);
     }
