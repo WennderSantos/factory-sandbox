@@ -55,6 +55,10 @@ public record LedgerEntry(
         return description != null && !description.isBlank();
     }
 
+    public boolean hasExternalReference() {
+        return externalReference != null;
+    }
+
     public BigDecimal signedAmount() {
         return isCredit() ? amount : amount.negate();
     }
