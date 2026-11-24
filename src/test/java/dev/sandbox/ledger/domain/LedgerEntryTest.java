@@ -11,6 +11,10 @@ import org.junit.jupiter.api.Test;
 class LedgerEntryTest {
 
     private static LedgerEntry entry(EntryType type, String amount) {
+        return entry(type, amount, null);
+    }
+
+    private static LedgerEntry entry(EntryType type, String amount, String externalReference) {
         return new LedgerEntry(
                 UUID.randomUUID(),
                 UUID.randomUUID(),
@@ -18,6 +22,7 @@ class LedgerEntryTest {
                 type,
                 new BigDecimal(amount),
                 "test",
+                externalReference,
                 Instant.parse("2026-01-01T00:00:00Z"));
     }
 
@@ -42,5 +47,33 @@ class LedgerEntryTest {
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "1.005"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("decimal places");
+    }
+
+    @Test
+    void externalReferenceIsOptional() {
+        assertThat(entry(EntryType.CREDIT, "10.00").externalReference()).isNull();
+    }
+
+    @Test
+    void acceptsExternalReferenceOfMaximumLength() {
+        final var reference = "r".repeat(LedgerEntry.MAX_EXTERNAL_REFERENCE_LENGTH);
+
+        assertThat(entry(EntryType.CREDIT, "10.00", reference).externalReference()).isEqualTo(reference);
+    }
+
+    @Test
+    void rejectsBlankExternalReference() {
+        assertThatThrownBy(() -> entry(EntryType.CREDIT, "10.00", "  "))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("blank");
+    }
+
+    @Test
+    void rejectsExternalReferenceAboveMaximumLength() {
+        final var reference = "r".repeat(LedgerEntry.MAX_EXTERNAL_REFERENCE_LENGTH + 1);
+
+        assertThatThrownBy(() -> entry(EntryType.CREDIT, "10.00", reference))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("at most 64 characters");
     }
 }

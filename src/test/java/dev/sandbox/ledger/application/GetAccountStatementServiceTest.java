@@ -102,6 +102,7 @@ class GetAccountStatementServiceTest {
                 type,
                 new BigDecimal(amount),
                 "test",
+                null,
                 Instant.parse(createdAt)));
     }
 }

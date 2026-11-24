@@ -10,5 +10,10 @@ public interface PostEntryUseCase {
     LedgerEntry post(PostEntryCommand command);
 
     record PostEntryCommand(
-            UUID organizationId, UUID accountId, EntryType type, BigDecimal amount, String description) {}
+            UUID organizationId,
+            UUID accountId,
+            EntryType type,
+            BigDecimal amount,
+            String description,
+            String externalReference) {}
 }
