@@ -4,6 +4,7 @@ import dev.sandbox.ledger.application.port.out.LedgerEntryRepository;
 import dev.sandbox.ledger.domain.LedgerEntry;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,11 @@ public class InMemoryLedgerEntryRepository implements LedgerEntryRepository {
     public LedgerEntry save(LedgerEntry entry) {
         entries.put(entry.id(), entry);
         return entry;
+    }
+
+    @Override
+    public Optional<LedgerEntry> findById(UUID id) {
+        return Optional.ofNullable(entries.get(id));
     }
 
     @Override
