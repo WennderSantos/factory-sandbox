@@ -60,7 +60,6 @@ public record LedgerEntry(
         return externalReference != null;
     }
 
-    // An entry of one thousand or more is shown with a warning on the statement.
     public boolean isLarge() {
         return amount.compareTo(LARGE_FROM) >= 0;
     }
