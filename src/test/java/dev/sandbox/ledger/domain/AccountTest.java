@@ -28,4 +28,28 @@ class AccountTest {
         assertThatThrownBy(() -> usdAccount().supports(null))
                 .isInstanceOf(NullPointerException.class);
     }
+
+    private static Account named(String name) {
+        return new Account(UUID.randomUUID(), UUID.randomUUID(), name, "USD");
+    }
+
+    @Test
+    void displayNameRemovesSurroundingWhitespace() {
+        assertThat(named("  cash \t").displayName()).isEqualTo("cash");
+    }
+
+    @Test
+    void displayNameLeavesNameWithoutSurroundingWhitespaceUnchanged() {
+        assertThat(named("cash").displayName()).isEqualTo("cash");
+    }
+
+    @Test
+    void displayNameKeepsInnerWhitespace() {
+        assertThat(named(" a  b ").displayName()).isEqualTo("a  b");
+    }
+
+    @Test
+    void displayNameOfWhitespaceOnlyNameIsEmpty() {
+        assertThat(named(" \t ").displayName()).isEmpty();
+    }
 }
