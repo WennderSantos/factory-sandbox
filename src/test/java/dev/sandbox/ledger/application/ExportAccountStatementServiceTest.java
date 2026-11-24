@@ -79,6 +79,15 @@ class ExportAccountStatementServiceTest {
         final var theirs = fixture.openAccount(otherOrganization);
         save(mine, "mine");
         save(theirs, "theirs");
+        fixture.entries.save(new LedgerEntry(
+                UUID.randomUUID(),
+                otherOrganization,
+                mine.id(),
+                EntryType.CREDIT,
+                new BigDecimal("2.00"),
+                "same-account-other-org",
+                null,
+                Instant.parse("2026-01-01T12:00:00Z")));
 
         final var text = export.export(new ExportQuery(organizationId, mine.id()));
 
