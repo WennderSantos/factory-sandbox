@@ -46,4 +46,14 @@ class EntryTypeTest {
             assertThat(t.label()).isEqualTo(t.name().toLowerCase(Locale.ROOT));
         }
     }
+
+    @Test
+    void creditIsCredit() {
+        assertThat(EntryType.CREDIT.isCredit()).isTrue();
+    }
+
+    @Test
+    void debitIsNotCredit() {
+        assertThat(EntryType.DEBIT.isCredit()).isFalse();
+    }
 }
