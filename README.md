@@ -7,6 +7,12 @@ A small payments ledger used as a sandbox for pull request review bot tests. It 
 Accounts belong to an organization. Credits and debits are posted to an account as ledger entries,
 and the balance of an account is the sum of its entries. A debit above the balance is refused.
 
+## Use cases
+
+- Post an entry: `PostEntryUseCase`
+- Balance: `GetBalanceUseCase`
+- Account statement: `GetAccountStatementUseCase`
+
 ## Layout
 
 - `domain`: records and exceptions, no dependencies
