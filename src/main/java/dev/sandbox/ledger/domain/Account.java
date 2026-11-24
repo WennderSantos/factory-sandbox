@@ -15,6 +15,10 @@ public record Account(UUID id, UUID organizationId, String name, String currency
         }
     }
 
+    public String displayName() {
+        return name.strip();
+    }
+
     public boolean supports(String code) {
         Objects.requireNonNull(code, "currency");
         return currency.equalsIgnoreCase(code);
