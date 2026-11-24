@@ -44,7 +44,7 @@ class LedgerEntryTest {
 
     @Test
     void anEntryUnderOneThousandIsNotLarge() {
-        assertThat(entry(EntryType.DEBIT, "999.99").isLarge()).isTrue();
+        assertThat(entry(EntryType.DEBIT, "999.99").isLarge()).isFalse();
     }
 
     @Test
