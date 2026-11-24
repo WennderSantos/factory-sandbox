@@ -47,6 +47,25 @@ class LedgerEntryTest {
     }
 
     @Test
+    void debitEntryIsDebit() {
+        assertThat(entry(EntryType.DEBIT, "10.00").isDebit()).isTrue();
+    }
+
+    @Test
+    void creditEntryIsNotDebit() {
+        assertThat(entry(EntryType.CREDIT, "10.00").isDebit()).isFalse();
+    }
+
+    @Test
+    void isDebitIsTheOppositeOfIsCreditForEveryType() {
+        for (final var type : EntryType.values()) {
+            final var entry = entry(type, "10.00");
+
+            assertThat(entry.isDebit()).isNotEqualTo(entry.isCredit());
+        }
+    }
+
+    @Test
     void rejectsZeroOrNegativeAmount() {
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "0.00")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> entry(EntryType.CREDIT, "-1.00")).isInstanceOf(IllegalArgumentException.class);
