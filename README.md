@@ -12,6 +12,7 @@ and the balance of an account is the sum of its entries. A debit above the balan
 - Post an entry: `PostEntryUseCase`
 - Balance: `GetBalanceUseCase`
 - Account statement: `GetAccountStatementUseCase`
+- Export account statement as text: `ExportAccountStatementUseCase`
 
 ## Layout
 
