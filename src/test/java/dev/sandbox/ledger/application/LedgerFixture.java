@@ -18,6 +18,7 @@ final class LedgerFixture {
     final Clock clock = Clock.fixed(Instant.parse("2026-01-01T12:00:00Z"), ZoneOffset.UTC);
     final GetBalanceService getBalance = new GetBalanceService(accounts, entries);
     final PostEntryService postEntry = new PostEntryService(getBalance, entries, clock);
+    final CanPayService canPay = new CanPayService(accounts, getBalance);
 
     Account openAccount(UUID organizationId) {
         return accounts.save(new Account(UUID.randomUUID(), organizationId, "operating", "BRL"));
