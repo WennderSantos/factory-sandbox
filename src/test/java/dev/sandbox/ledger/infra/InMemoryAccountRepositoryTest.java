@@ -14,14 +14,17 @@ class InMemoryAccountRepositoryTest {
 
     @Test
     void listsOnlyOwnAccountsSortedByNameIgnoringCaseThenId() {
-        final var beta = repository.save(account(1, orgA, "beta"));
-        final var upper = repository.save(account(2, orgA, "Alpha"));
-        final var lower = repository.save(account(3, orgA, "alpha"));
+        final var zeta = repository.save(account(1, orgA, "Zeta"));
+        final var lateLower = repository.save(account(9, orgA, "alpha"));
+        final var earlyUpper = repository.save(account(2, orgA, "Alpha"));
+        final var lastLower = repository.save(account(1L << 40, orgA, "alpha"));
+        final var firstLower = repository.save(account(3, orgA, "alpha"));
         final var aardvark = repository.save(account(4, orgB, "Aardvark"));
-        final var otherBeta = repository.save(account(5, orgB, "beta"));
+        final var otherZeta = repository.save(account(5, orgB, "zeta"));
 
-        assertThat(repository.findByOrganizationId(orgA)).containsExactly(upper, lower, beta);
-        assertThat(repository.findByOrganizationId(orgB)).containsExactly(aardvark, otherBeta);
+        assertThat(repository.findByOrganizationId(orgA))
+                .containsExactly(earlyUpper, firstLower, lateLower, lastLower, zeta);
+        assertThat(repository.findByOrganizationId(orgB)).containsExactly(aardvark, otherZeta);
     }
 
     @Test
