@@ -15,6 +15,10 @@ public record Account(UUID id, UUID organizationId, String name, String currency
         }
     }
 
+    public boolean hasName() {
+        return !name.isBlank();
+    }
+
     public String displayName() {
         return name.strip();
     }

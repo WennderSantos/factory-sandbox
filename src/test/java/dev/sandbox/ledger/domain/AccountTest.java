@@ -52,4 +52,14 @@ class AccountTest {
     void displayNameOfWhitespaceOnlyNameIsEmpty() {
         assertThat(named(" \t ").displayName()).isEmpty();
     }
+
+    @Test
+    void anAccountWithLettersInItsNameHasAName() {
+        assertThat(usdAccount().hasName()).isTrue();
+    }
+
+    @Test
+    void anAccountWhoseNameIsOnlySpacesHasNoName() {
+        assertThat(new Account(UUID.randomUUID(), UUID.randomUUID(), "   ", "USD").hasName()).isFalse();
+    }
 }
