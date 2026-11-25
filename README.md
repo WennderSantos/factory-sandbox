@@ -38,4 +38,6 @@ The tests need JDK 25 and run with:
 mvn -q -B test
 ```
 
+The first run downloads the dependencies from Maven Central.
+
 The rules a reviewer checks are in [REVIEW_RULES.md](REVIEW_RULES.md).
