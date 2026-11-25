@@ -1,5 +1,6 @@
 package dev.sandbox.ledger.domain;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,6 +18,10 @@ public record Account(UUID id, UUID organizationId, String name, String currency
 
     public String displayName() {
         return name.strip();
+    }
+
+    public String label() {
+        return displayName() + " (" + currency.toUpperCase(Locale.ROOT) + ")";
     }
 
     public boolean supports(String code) {
