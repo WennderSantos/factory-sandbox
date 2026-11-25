@@ -15,3 +15,4 @@ Every pull request is checked against these rules. A violation of rules 1 to 5 b
 11. No unused imports, no commented out code.
 12. Comments explain why, not what.
 13. Pull requests stay small and do one thing.
+14. **LEDGER-14 (must)** A use case never returns a collection its caller can change: return `List.copyOf(...)` or another unmodifiable list.
