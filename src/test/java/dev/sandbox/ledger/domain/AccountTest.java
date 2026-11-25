@@ -29,6 +29,23 @@ class AccountTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
+    @Test
+    void isForeignWhenHomeCurrencyDiffers() {
+        assertThat(usdAccount().isForeign("EUR")).isTrue();
+    }
+
+    @Test
+    void isNotForeignWhenHomeCurrencyIsTheSameIgnoringCase() {
+        assertThat(usdAccount().isForeign("USD")).isFalse();
+        assertThat(usdAccount().isForeign("usd")).isFalse();
+    }
+
+    @Test
+    void isForeignRejectsNullHomeCurrency() {
+        assertThatThrownBy(() -> usdAccount().isForeign(null))
+                .isInstanceOf(NullPointerException.class);
+    }
+
     private static Account named(String name) {
         return new Account(UUID.randomUUID(), UUID.randomUUID(), name, "USD");
     }
