@@ -19,6 +19,10 @@ public record Account(UUID id, UUID organizationId, String name, String currency
         return name.strip();
     }
 
+    public String label() {
+        return displayName() + " (" + currency.toUpperCase(java.util.Locale.ROOT) + ")";
+    }
+
     public boolean supports(String code) {
         Objects.requireNonNull(code, "currency");
         return currency.equalsIgnoreCase(code);
