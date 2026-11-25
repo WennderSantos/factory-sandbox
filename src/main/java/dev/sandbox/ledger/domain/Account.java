@@ -28,4 +28,9 @@ public record Account(UUID id, UUID organizationId, String name, String currency
         Objects.requireNonNull(code, "currency");
         return currency.equalsIgnoreCase(code);
     }
+
+    public boolean isForeign(String homeCurrency) {
+        Objects.requireNonNull(homeCurrency, "currency");
+        return !currency.equalsIgnoreCase(homeCurrency);
+    }
 }
