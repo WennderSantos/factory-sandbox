@@ -33,4 +33,9 @@ public record Account(UUID id, UUID organizationId, String name, String currency
         Objects.requireNonNull(homeCurrency, "currency");
         return !currency.equalsIgnoreCase(homeCurrency);
     }
+
+    public boolean sameCurrencyAs(Account other) {
+        Objects.requireNonNull(other, "currency");
+        return currency.equalsIgnoreCase(other.currency);
+    }
 }

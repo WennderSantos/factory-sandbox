@@ -69,4 +69,27 @@ class AccountTest {
     void displayNameOfWhitespaceOnlyNameIsEmpty() {
         assertThat(named(" \t ").displayName()).isEmpty();
     }
+
+    private static Account withCurrency(String currency) {
+        return new Account(UUID.randomUUID(), UUID.randomUUID(), "cash", currency);
+    }
+
+    @Test
+    void sameCurrencyAsIgnoresCaseInEitherDirection() {
+        assertThat(withCurrency("USD").sameCurrencyAs(withCurrency("USD"))).isTrue();
+        assertThat(withCurrency("USD").sameCurrencyAs(withCurrency("usd"))).isTrue();
+        assertThat(withCurrency("usd").sameCurrencyAs(withCurrency("USD"))).isTrue();
+    }
+
+    @Test
+    void sameCurrencyAsIsFalseForDifferentCurrencies() {
+        assertThat(withCurrency("USD").sameCurrencyAs(withCurrency("EUR"))).isFalse();
+    }
+
+    @Test
+    void sameCurrencyAsRejectsNullAccount() {
+        assertThatThrownBy(() -> usdAccount().sameCurrencyAs(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("currency");
+    }
 }
