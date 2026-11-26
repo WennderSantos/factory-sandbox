@@ -1,0 +1,19 @@
+# The approval policy of this repository, read by the factory "banking" from the base branch of every pull request.
+# The team that owns this code owns this file. A key that is set here replaces the factory's value for this repository.
+# A key the factory locks can be made stricter here and never looser. A pull request that changes this folder is approved by a person.
+# Every line below is commented out and shows the factory's value today. Take the "# " off a key to set it.
+review:
+  # light: only the reviewers that read every commit. standard: the factory's list. full: every reviewer on every pull request.
+  # level: standard
+  # Or pick by name, among the factory's reviewers: correctness, security, plan, company-standards, project-standards, architect.
+  # reviewers: [correctness, security, plan, company-standards, project-standards, architect]
+  # A pull request that changes one of these paths, or carries one of these labels, is approved by a person.
+  # person_paths: [CLAUDE.md, AGENTS.md, REVIEW.md, REVIEW_RULES.md, ".claude/**", ".cursor/rules/**", ".github/workflows/**", "**/db/migration/**"]
+  # person_labels: [security-signoff]
+  # Plain sentences. A pull request that one of them describes is approved by a person. One cheap agent reads the diff and says which match, with the line.
+  # person_when: ["changes how money is rounded", "adds a dependency"]
+ship:
+  # all: the factory merges what it approved. classes: only a pull request inside a class. off: a person merges.
+  # merge: all
+  # window: { days: [mon, tue, wed, thu, fri], from: "09:00", to: "17:00", timezone: UTC }
+  # classes: a list like the factory's ship.classes (name, authors, paths, max_changed_lines, labels, from_order).
