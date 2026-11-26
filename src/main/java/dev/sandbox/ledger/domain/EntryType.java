@@ -17,6 +17,10 @@ public enum EntryType {
         return this == CREDIT;
     }
 
+    public boolean isDebit() {
+        return this == DEBIT;
+    }
+
     public String label() {
         return name().toLowerCase(Locale.ROOT);
     }
