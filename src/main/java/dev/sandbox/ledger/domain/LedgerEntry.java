@@ -1,6 +1,7 @@
 package dev.sandbox.ledger.domain;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
@@ -61,6 +62,12 @@ public record LedgerEntry(
 
     public BigDecimal signedAmount() {
         return isCredit() ? amount : amount.negate();
+    }
+
+    public boolean isOlderThan(Duration age, Instant now) {
+        Objects.requireNonNull(age, "age");
+        Objects.requireNonNull(now, "now");
+        return createdAt.plus(age).isBefore(now);
     }
 
     // Pure mirror of this entry: id and createdAt are kept on purpose. Whoever persists a reversal
