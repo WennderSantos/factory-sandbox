@@ -56,4 +56,14 @@ class EntryTypeTest {
     void debitIsNotCredit() {
         assertThat(EntryType.DEBIT.isCredit()).isFalse();
     }
+
+    @Test
+    void debitIsDebit() {
+        assertThat(EntryType.DEBIT.isDebit()).isTrue();
+    }
+
+    @Test
+    void creditIsNotDebit() {
+        assertThat(EntryType.CREDIT.isDebit()).isFalse();
+    }
 }
