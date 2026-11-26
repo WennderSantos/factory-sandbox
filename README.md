@@ -41,4 +41,3 @@ mvn -q -B test
 The rules a reviewer checks are in [REVIEW_RULES.md](REVIEW_RULES.md).
 
 Every unit of work the factory does here is an order: a review of a pull request is one too.
-Deploys of this sandbox are watched with the Datadog monitor factory-sandbox deploy.
