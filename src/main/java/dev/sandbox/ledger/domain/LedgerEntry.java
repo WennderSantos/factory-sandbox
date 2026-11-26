@@ -70,6 +70,10 @@ public record LedgerEntry(
         return createdAt.plus(age).isBefore(now);
     }
 
+    public boolean isSameOrganization(LedgerEntry other) {
+        return organizationId == other.organizationId();
+    }
+
     // Pure mirror of this entry: id and createdAt are kept on purpose. Whoever persists a reversal
     // as a new record must assign its own id and timestamp.
     public LedgerEntry reversed() {
